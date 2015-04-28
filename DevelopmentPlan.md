@@ -1,5 +1,5 @@
 	
-* 0.1.0 - Goals: Train controls with speed controls. Player can get on off train or move to other cars to detach them, or to throw switches. 
+* 0.0.x Goals: Train controls with speed controls. Player can get on off train or move to other cars to detach them, or to throw switches. 
   * 0.0.1 *DONE* - On a fixed locomotive that moves around a track. It moves one square per button press (forward vs back) from player. 
   * 0.0.1.1 *DONE* - Add Switches. Have them display, with background colors?, which direction the switch is thrown? (Though for colorblind it would be better to be symbol changes, not color changes). Have a single keystroke flip all switches on the map for now.
   * 0.0.2 - *DONE* Cars added to train that trail behind it.
@@ -15,38 +15,39 @@
   * 0.0.9 - *SKIPPING* Use similar Roguelike characters, like "#" being the walls of a building.
   * 0.0.10 - *SKIPPING* Game lifecycle, with startup, playing, death, and scoretable and saves
   * 0.0.11 - *SKIPPING* Revisit color usage, limit used colors, and avoid the clown like issue. Only use bold, notable colors to emphasize something that needs to be.
-  * Set-up Github or Mercurial for code. Put this document file up on there.
+  * *DONE* Set-up Github or Mercurial for code. Put this document file up on there.
 
-* 0.2.0 - Gameplay: Now that some very basic structure is set up (tracks, switches, movement on and off of train, splitting and joining trains) its time to add SOME actually gameplay so that there is a reason to for some of the other infrastructure to exist (better GUI, game lifecycle)
-  * Add some basic objectives (a yard, move a car from one yard to the other) - This sets the stage for adding the Steam Locomotive mechanics as the challenge for accomplishing those basic objectives.
-  * Steam Locomotive mechanics and unit tests - Add this now, as it provides the more interesting movement aspect to playing the game (albeit I want some workaround so that for dev mode, I can easily move the train around)
-  * Time System - Not quite yet, there just are not enough game components to use it
-  * Objectives/Score - 
+* 0.1.x - Gameplay: Now that some very basic structure is set up (tracks, switches, movement on and off of train, splitting and joining trains) its time to add SOME actually gameplay so that there is a reason to for some of the other infrastructure to exist (better GUI, game lifecycle)
+  * 0.1.1 - Add some basic objectives (a yard, move a car from one yard to the other) - This sets the stage for adding the Steam Locomotive mechanics as the challenge for accomplishing those basic objectives.
+    * Add cash to player and display. Will just be for display now.
+    * Add locations to the map (Rail Yards). They will have a different background color, have a name, which the user can see when they are over them.
+    * Add missions, where the player must move a car from one yard to another. The user will have a mission browser (in the locomotive? caboose!).
+    * Add checking and success/failure of the mission, with corresponding cash change.
+  * 0.1.2 - Steam Locomotive mechanics and unit tests - Add this now, as it provides the more interesting movement aspect to playing the game (albeit I want some workaround so that for dev mode, I can easily move the train around)
+    * Create a Push Cart, which the user presses a button to give it force (which it can save with momentum). Probably cannot pull a car
+    * Create a Super Push Cart, which gives the user significant force to pull things. This would essentially be the dev-god-mode locomotive.
+    * Create a basic steam locomotive itself
+  * 0.1.3 - Time System - Not quite yet, there just are not enough game components to use it
+  * 0.1.4 - Objectives/Score - 
 		
-* 0.3.0 - Game Lifecycle - Now that a number of actual gameplay features exist, add the infrastructure for proper game function, like title screen, save games, etc
+* 0.2.x - Game Lifecycle - Now that a number of actual gameplay features exist, add the infrastructure for proper game function, like title screen, save games, etc
   * Title screen
   * Saves
   * Death, Retirement, and Game Over
 
+_Implement proper time, with different actions taking time, and the engine moving that amount of time_
+_Implement Message System_
 
-
-
-* 0.2.0 - Goals: Locomotive now behaves like an actual steam engine, requiring finnese with fire temperature, boiler temperature, etc. In order to stop/start it. 
-  * 0.1.1 - Implement proper time, with different actions taking time, and the engine moving that amount of time
-  * 0.1.2 - Implement message system
-  * 0.1.3 - Implement a separate class that isolates all of the steam engine mechanics. Write unit tests to verify the state of the engine.
-  * 0.1.4 - Losing / Damage - Trains smashing into each other too fast should crash?
-
-* 0.3.0 - NPCs: Third party trains that run along the lines
+* 0.3.x - NPCs: Third party trains that run along the lines
   * Brakemen to throw switches
   * Fireman to automate the water and fire intake
   * NPC Trains with their own engineers
 
-* 0.4.0 - Map Objectives: Player can earn money by moving cars to destinations, and must use that money to buy fuel.
+* 0.4.x - More Map Objectives: Player can earn money by moving cars to destinations, and must use that money to buy fuel.
   * Buildings/Businesses shown on map
   * Interaction (on foot?) with those businesses
 
-* 0.5.0 - Random Maps: Maps are procedurally generated. Leaving one map generates another.
+* 0.5.x - Random Maps: Maps are procedurally generated. Leaving one map generates another.
   * Buildings - Eventually represent points of interest (add a building interaction system?)
   * Bridges - Can walk over as a person… and can get hit.
   * Rivers - Inhibit ground movement
@@ -57,4 +58,4 @@
 		
 		
 		
-* 1.0.0 - Retirement: After a certain number of turns, you retire, getting a score.
+* 1.0.x - Retirement: After a certain number of turns, you retire, getting a score.

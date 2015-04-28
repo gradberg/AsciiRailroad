@@ -11,7 +11,7 @@ Player represents the engineer, who both operates the locomotive and is the owne
   * _Rolling-Stock_ - At the start of the game, the player only owns the engine and tender, and can only take missions that provide their own rolling stock. Across maps, players can acquire their own cars that they keep with them, allowing them to do additional missions that expect cars to be provided.
   * _Hire Crew_ - At the start, you are a one-man-crew-and-company. Sort of a independent trucker as now. You can hire various crew to assist you:
     * _Brakeman_ can run up and down the train, working the brakes, and jump off the train to throw switches.
-    * _Coal Shoveler_ would be tasked with keeping the fire appropriately full at all times.
+    * _Fireman_ would be tasked with keeping the fire appropriately full at all times.
     * _Engineer_ can take over the duties of actually operating the locomotive itself, taking overall orders from the Player. This is more of a convenience if the player wants to stop running the locomotive themselves. If the player decides to double- or triple-head the train, he'll need at least an Engineer for each.
     * _Lawyer_ increases the chance of winning litigation (stolen cars and cargo, damaged cargo, killed people) or at least reducing their damages.
     
