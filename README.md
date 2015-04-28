@@ -22,10 +22,10 @@ I feel the simulation of the steam locomotive is a central aspect of this game g
     
 # Online Research	
 Locomotive Theory of Operation
-http://www.trainorders.com/discussion/read.php?10,586430,nodelay=1
-http://en.wikibooks.org/wiki/Steam_Locomotive_Operation
-http://www.ovsrails.com/OVSTI/SteamLocoManual.htm
+* http://www.trainorders.com/discussion/read.php?10,586430,nodelay=1
+* http://en.wikibooks.org/wiki/Steam_Locomotive_Operation
+* http://www.ovsrails.com/OVSTI/SteamLocoManual.htm
 
 Running 2 or 3 locomotives
-https://en.wikipedia.org/wiki/Double-heading
+* https://en.wikipedia.org/wiki/Double-heading
 
