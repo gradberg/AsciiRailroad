@@ -1,3 +1,6 @@
+_Repo/Code Notes:_
+_The current state of this python code was from when I was still learning how to do application development (rather than just one-off scripts), so some of the conventions it uses are a bit wonky. I like this theme, so either I will refactor the code or try it on a new platform._
+
 # AsciiRailroad
 Capture the feel of operating a train, picking up cars, rearranging cars, and delivering cars to destinations, all while managing available track space and avoiding other trains. Run a Steam Locomotive, trying to maximize the power and fuel efficiency out of it, all while trying to make careful stops and starts to get your contracts fulfilled.
 
