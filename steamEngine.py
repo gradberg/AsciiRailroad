@@ -27,7 +27,7 @@ BRAKE = 0.3
 class FakeEngine:
     def __init__(self):
         self.brakePercentage = 0.0 # 0.0 to 1.0
-        self.throttlePercentage = 0.3 # -1.0 to 1.0
+        self.throttlePercentage = 0.0 # -1.0 to 1.0
        
     # ---- eventually will pass stuff in
     def GetSpeedChangeForOneTurn(self, currentSpeed):

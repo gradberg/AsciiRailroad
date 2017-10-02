@@ -44,7 +44,7 @@ def DrawScreen(gameState):
 def drawTiles(map, xVisibleOffset, yVisibleOffset):
     for y in range(MOD_MAP.HEIGHT):
         for x in range(MOD_MAP.WIDTH):
-            drawTile(map[x][y],x,y, xVisibleOffset, yVisibleOffset)
+            drawTile(map.Tile(x,y),x,y, xVisibleOffset, yVisibleOffset)
             
 def drawTrains(trains, player, visibleOffsetX, visibleOffsetY):    
     playerTrain = player.GetTrain()
@@ -95,11 +95,12 @@ def drawPlayers(player, visibleOffsetX, visibleOffsetY):
     libtcod.console_set_char_background(0, screenX, screenY, libtcod.black, libtcod.BKGND_SET)
 
 def drawUi(gameState):    
+    libtcod.console_print(0, 52, 1, "Money:    %d" % gameState.Player.Money)
     libtcod.console_print(0, 52, 2, fmt.format("Turn:     {0}", gameState.Turn))
     
     if gameState.Player.OnCar is None:
         # Display anything relevant on the ground
-        tile = gameState.Map[gameState.Player.X][gameState.Player.Y]
+        tile = gameState.Map.Tile(gameState.Player.X,gameState.Player.Y)
         if (tile.IsSwitchControl == True):
             drawUiSwitch(tile.Switch)
         
@@ -162,6 +163,8 @@ def drawTile(tile, x, y, visibleOffsetX, visibleOffsetY):
             color = libtcod.orange         
     
         libtcod.console_set_char_background(0, screenX, screenY, color, libtcod.BKGND_SET)
+    elif (not tile.Location is None): # ---- Need to also see if adjacent ones are in yard.
+        libtcod.console_set_char_background(0, screenX, screenY, libtcod.light_blue, libtcod.BKGND_SET)
     elif (tile.IsTrack == True):
         libtcod.console_set_char_background(0, screenX, screenY, libtcod.darker_sepia, libtcod.BKGND_SET)
         

@@ -136,7 +136,7 @@ class Train:
 
     def GetNextForwardTile(self, map):
         frontCar = self.GetFrontCar()       
-        currentTile = map[frontCar.X][frontCar.Y]
+        currentTile = map.Tile(frontCar.X,frontCar.Y)
         offsetX, offsetY, newDirection, success = currentTile.GetNextTileOffset(
             map,
             frontCar.X,
@@ -172,7 +172,7 @@ class Train:
 
     def GetNextBackwardTile(self, map):
         backCar = self.GetBackCar()
-        currentTile = map[backCar.X][backCar.Y]
+        currentTile = map.Tile(backCar.X,backCar.Y)
         offsetX, offsetY, newDirection, success = currentTile.GetNextTileOffset(
             map,
             backCar.X,

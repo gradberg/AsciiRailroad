@@ -9,6 +9,7 @@ class Player:
         self.X = x
         self.Y = y
         self.OnCar = car
+        self.Money = 1000
         
     def GetLocation(self):
         if self.OnCar is None:
@@ -83,7 +84,7 @@ class Player:
         # Only used for On Foot right now.
         if (not self.OnCar is None): return self.ActivateTrainCar(map)
         
-        tile = map[self.X][self.Y]
+        tile = map.Tile(self.X,self.Y)
         switch = tile.Switch
         if (switch is None): return False
         

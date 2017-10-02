@@ -20,27 +20,29 @@ def handleKeys(gameState):
     if key.c == ord(' '):
         return False, 1
     
+    # ---- These need to be changed to only be usable if the player is on a car or location
+    #      that they appply to.
     if key.c == ord('t'):
         if not gameState.Player.GetTrain() is None:
-            engine = gameState.Player.GetTrain().GetFrontCar().Engine
+            engine = gameState.Player.OnCar.Engine
             engine.SetThrottle(engine.throttlePercentage + 0.1)
         return False, 0
     
     if key.c == ord('g'):
         if not gameState.Player.GetTrain() is None:
-            engine = gameState.Player.GetTrain().GetFrontCar().Engine
+            engine = gameState.Player.OnCar.Engine
             engine.SetThrottle(engine.throttlePercentage - 0.1)
         return False, 0
     
     if key.c == ord('y'):
         if not gameState.Player.GetTrain() is None:
-            engine = gameState.Player.GetTrain().GetFrontCar().Engine
+            engine = gameState.Player.OnCar.Engine
             engine.SetBrakes(engine.brakePercentage + 0.1)
         return False, 0
     
     if key.c == ord('h'):
         if not gameState.Player.GetTrain() is None:
-            engine = gameState.Player.GetTrain().GetFrontCar().Engine
+            engine = gameState.Player.OnCar.Engine
             engine.SetBrakes(engine.brakePercentage - 0.1)
         return False, 0
         
@@ -100,7 +102,8 @@ MOD_SCREEN.Initialize()
 
 # Initial game
 _gameState = GameState.GameState()
-_gameState.Map = MOD_MAP.MakeMap()
+_gameState.Map = MOD_MAP.Map()
+_gameState.Map.InitializeDevMap()
 
 playerTrain = MOD_TRAIN.Train(MOD_TRAIN.TrainCar("Locomotive", 'L',libtcod.black,    13, 10, 'E', MOD_ENGINE.FakeEngine()))
 playerTrain.AppendCar(MOD_TRAIN.TrainCar("Tender",  'T',libtcod.black,    12, 10, 'E', None))
@@ -114,12 +117,16 @@ _gameState.AppendTrain(playerTrain)
 
 _gameState.Player = MOD_PLAYER.Player(13,12, None, None)    
 
-secondTrain = MOD_TRAIN.Train(MOD_TRAIN.TrainCar("Flatcar", 'F',libtcod.sepia, 4, 12, 'N', MOD_ENGINE.CarWithBrakes()))
-secondTrain.AppendCar(MOD_TRAIN.TrainCar("Flatcar", 'F',libtcod.sepia, 4, 13, 'N', MOD_ENGINE.CarWithBrakes()))
-secondTrain.AppendCar(MOD_TRAIN.TrainCar("Flatcar", 'F',libtcod.sepia, 4, 14, 'N', MOD_ENGINE.CarWithBrakes()))
+secondTrain = MOD_TRAIN.Train(MOD_TRAIN.TrainCar("Flatcar", 'F',libtcod.sepia, 5, 23, 'W', MOD_ENGINE.CarWithBrakes()))
+secondTrain.AppendCar(MOD_TRAIN.TrainCar("Flatcar", 'F',libtcod.sepia, 6, 23, 'W', MOD_ENGINE.CarWithBrakes()))
+secondTrain.AppendCar(MOD_TRAIN.TrainCar("Flatcar", 'F',libtcod.sepia, 7, 23, 'W', MOD_ENGINE.CarWithBrakes()))
 secondTrain.Cars[0].Engine.Activate()
 _gameState.AppendTrain(secondTrain)
 
+thirdTrain = MOD_TRAIN.Train(
+    MOD_TRAIN.TrainCar("Boxcar",  'B',libtcod.dark_red,  8, 25, 'E', MOD_ENGINE.CarWithBrakes())
+    )
+_gameState.AppendTrain(thirdTrain)
 
 # Main game loop
 while not libtcod.console_is_window_closed():

@@ -2,7 +2,7 @@
 import libtcodpy as libtcod
 import Utilities
 
-WIDTH = 80
+WIDTH = 160
 HEIGHT = 45
 
 class TrackSwitch:
@@ -23,6 +23,15 @@ class TrackSwitch:
             if (self.IsSwitched):
                 self.ControlTile.trackChar = '<'
 
+class MapLocation:
+    def __init__(self, name):
+        self.Name = name
+        self.Tiles = []        
+        
+    def AssignTile(self, mapTile):
+        self.Tiles.append(mapTile)
+        mapTile.Location = self        
+                
 class MapTile:
     def __init__(self, trackChar):
         self.trackChar = trackChar
@@ -41,6 +50,9 @@ class MapTile:
         # Indicates this tile is part of a switch          
         self.Switch = None
         self.IsSwitchControl = False 
+        
+        # Indicates this tile is part of a defined building/map location
+        self.Location = None
         
     def CountConnections(self):
         result = 0
@@ -93,7 +105,7 @@ class MapTile:
         # Use the normal logic to get the next tile
         normalDirection = self.GetNextMoveDirection(direction)
         normalOffsetX, normalOffsetY = Utilities.GetOffsetsForDirection(normalDirection)
-        normalTile = map[x + normalOffsetX][y + normalOffsetY]
+        normalTile = map.Tile(x + normalOffsetX,y + normalOffsetY)
             
         # Could not get a valid direction to move to, which means there is no more track
         # in this direction
@@ -186,6 +198,9 @@ class TrackPlotter:
         self.firstPlot = True
         self.firstPlotChar = firstPlotChar
         
+        # MapLocation for which all current ploted points will be assigned to.
+        self.CurrentLocation = None
+        
     # Repositions the current point, which is useful for creating switches...    
     def SetTo(self, x, y):
         self.x = x
@@ -198,8 +213,10 @@ class TrackPlotter:
         # If this is the very start of the plot, put a 'star' indicating that its the end
         # of a track.        
         if (self.firstPlot == True):
-            self.map[self.x][self.y].trackChar = self.firstPlotChar
-            self.map[self.x][self.y].IsTrack = True
+            self.map.Tile(self.x,self.y).trackChar = self.firstPlotChar
+            self.map.Tile(self.x,self.y).IsTrack = True            
+            if (not self.CurrentLocation is None):
+                self.CurrentLocation.AssignTile(self.map.Tile(self.x,self.y))                
             self.firstPlot = False
         
         libtcod.line_init(self.x, self.y, xTo, yTo)
@@ -208,53 +225,60 @@ class TrackPlotter:
             # ---- Determine the direction between this track and the last.
             xd = x - self.x
             yd = y - self.y
+            
+            newTile = self.map.Tile(x,y)
+            oldTile = self.map.Tile(self.x, self.y)            
             if (xd == 0 and yd == -1): # going north
-                self.map[x][y].trackChar = '|'
-                self.map[x][y].S = True
-                self.map[x][y].IsTrack = True
-                self.map[self.x][self.y].N = True
+                newTile.trackChar = '|'
+                newTile.S = True
+                newTile.IsTrack = True
+                oldTile.N = True
             if (xd == 1 and yd == -1): # going northeast
-                self.map[x][y].trackChar = '/'
-                self.map[x][y].SW = True
-                self.map[x][y].IsTrack = True
-                self.map[self.x][self.y].NE = True
+                newTile.trackChar = '/'
+                newTile.SW = True
+                newTile.IsTrack = True
+                oldTile.NE = True
             if (xd == 1 and yd == 0): # going east
-                self.map[x][y].trackChar = '-'
-                self.map[x][y].W = True
-                self.map[x][y].IsTrack = True
-                self.map[self.x][self.y].E = True
+                newTile.trackChar = '-'
+                newTile.W = True
+                newTile.IsTrack = True
+                oldTile.E = True
             if (xd == 1 and yd == 1): # going southeast
-                self.map[x][y].trackChar = '\\'
-                self.map[x][y].NW = True
-                self.map[x][y].IsTrack = True
-                self.map[self.x][self.y].SE = True
+                newTile.trackChar = '\\'
+                newTile.NW = True
+                newTile.IsTrack = True
+                oldTile.SE = True
             if (xd == 0 and yd == 1): # going south
-                self.map[x][y].trackChar = '|'
-                self.map[x][y].N = True
-                self.map[x][y].IsTrack = True
-                self.map[self.x][self.y].S = True
+                newTile.trackChar = '|'
+                newTile.N = True
+                newTile.IsTrack = True
+                oldTile.S = True
             if (xd == -1 and yd == 1): # going southwest
-                self.map[x][y].trackChar = '/'
-                self.map[x][y].NE = True
-                self.map[x][y].IsTrack = True
-                self.map[self.x][self.y].SW = True
+                newTile.trackChar = '/'
+                newTile.NE = True
+                newTile.IsTrack = True
+                oldTile.SW = True
             if (xd == -1 and yd == 0): # going west
-                self.map[x][y].trackChar = '-'
-                self.map[x][y].E = True
-                self.map[x][y].IsTrack = True
-                self.map[self.x][self.y].W = True
+                newTile.trackChar = '-'
+                newTile.E = True
+                newTile.IsTrack = True
+                oldTile.W = True
             if (xd == -1 and yd == -1): # going northwest
-                self.map[x][y].trackChar = '\\'
-                self.map[x][y].SE = True
-                self.map[x][y].IsTrack = True
-                self.map[self.x][self.y].NW = True
+                newTile.trackChar = '\\'
+                newTile.SE = True
+                newTile.IsTrack = True
+                oldTile.NW = True
                 
             # If either the old or new location has more than 2 connections, then it is a switch. Mark it as such.
-            if self.map[x][y].CountConnections() == 3 and self.map[x][y].Switch is None:
+            if newTile.CountConnections() == 3 and newTile.Switch is None:
                 self.MakeSwitchAt(x, y)
                 
-            if self.map[self.x][self.y].CountConnections() == 3 and self.map[self.x][self.y].Switch is None:            
+            if oldTile.CountConnections() == 3 and oldTile.Switch is None:            
                 self.MakeSwitchAt(self.x, self.y)
+                
+            # If this is on a current location, then assign it to that location            
+            if (not self.CurrentLocation is None):
+                self.CurrentLocation.AssignTile(newTile)            
                 
             # Move along, using the member variables to store the previous location.
             self.x = x
@@ -265,7 +289,7 @@ class TrackPlotter:
         self.y = yTo
         
     def MakeSwitchAt(self, x, y):
-        switchTile = self.map[x][y]
+        switchTile = self.map.Tile(x,y)
         
         d1,d2 = switchTile.FindAdjacentConnections()
         
@@ -281,19 +305,15 @@ class TrackPlotter:
             primaryDirection = d2
             secondaryDirection = d1
         
-        #print d1,d2,rd1,rd2
-        #print switchTile.N,switchTile.NE,switchTile.E,switchTile.SE,switchTile.S,switchTile.SW,switchTile.W,switchTile.NW
-        #print primaryDirection, secondaryDirection
-        
         # If this cannot determine the primary direction, then don't create the switch.
         if (primaryDirection is None): return
         
         # That one is the primary, the other is the secondary.
         primaryOffsetX, primaryOffsetY = Utilities.GetOffsetsForDirection(primaryDirection)
-        primaryTile = self.map[x + primaryOffsetX][y + primaryOffsetY]
+        primaryTile = self.map.Tile(x + primaryOffsetX,y + primaryOffsetY)
                 
         secondaryOffsetX, secondaryOffsetY = Utilities.GetOffsetsForDirection(secondaryDirection)
-        secondaryTile = self.map[x + secondaryOffsetX][y + secondaryOffsetY]
+        secondaryTile = self.map.Tile(x + secondaryOffsetX,y + secondaryOffsetY)
                
         switch = TrackSwitch(switchTile, primaryTile, primaryDirection, secondaryTile, secondaryDirection)        
         switchTile.Switch = switch
@@ -306,7 +326,7 @@ class TrackPlotter:
         controlX = x + controlOffsetX
         controlY = y + controlOffsetY
         
-        controlTile = self.map[controlX][controlY]
+        controlTile = self.map.Tile(controlX,controlY)
         if (controlTile.IsTrack == True or controlTile.IsSwitchControl == True): return
         
         controlTile.IsSwitchControl = True
@@ -314,51 +334,96 @@ class TrackPlotter:
         controlTile.Switch = switch
         switch.ControlTile = controlTile
         
-def CreateMapArray(width,  height):
-    return [[ MapTile(' ') 
-        for y in range(height) ] 
-            for x in range(width) ]
+class Map:
+    def __init__(self):
+        self.Locations = []        
+        self.MapArray = [[ MapTile(' ') 
+            for y in range(HEIGHT) ] 
+                for x in range(WIDTH) ]
         
-def MakeMap():
-    # Initialize blank map
-    map = CreateMapArray(WIDTH, HEIGHT)
+    def Tile(self, x, y):
+        return self.MapArray[x][y]
+        
+    def AddLocation(self, mapLocation):
+        self.Locations.append(mapLocation)
+        return mapLocation
+                    
+    def InitializeDevMap(self):                
+        # Create locations on the map
+        westYard = self.AddLocation(MapLocation("West Yard"))
+        eastYard = self.AddLocation(MapLocation("East Yard"))        
+    
+        # Create the track    
+        p = TrackPlotter(self, 5,10, '-')
+        p.PlotTo(15,10)
+        p.PlotTo(19,13)
+        p.PlotTo(19,16)
+        p.PlotTo(18,17)
+        p.PlotTo(6 ,17)
+        p.PlotTo(4 ,15)
+        p.PlotTo(4 ,11)
+        p.PlotTo(5,10)
+        
+        # Yard tracks
+        p.CurrentLocation = westYard
+        p.SetTo(18,17) 
+        p.PlotTo(16,19) # track one
+        p.PlotTo(7, 19)    
+        
+        p.SetTo(16,19) 
+        p.PlotTo(14,21) # switch
+        p.PlotTo(7, 21) # track two
+        p.PlotTo(5,19)
+        p.PlotTo(2,19)
+        p.PlotTo(7,19)
+        
+        p.SetTo(14,21) 
+        p.PlotTo(12,23) # switch
+        p.PlotTo(4, 23) # track three
+        
+        p.SetTo(12,23)
+        p.PlotTo(10,25) # switch
+        p.PlotTo(4, 25) # track four
+        p.CurrentLocation = None
+        
+        p.SetTo(2,19) # dumb bottom-left side track
+        p.PlotTo(1,20)
+        p.PlotTo(1,30)
+        
+        # Line off the right side
+        p.SetTo(19,15)
+        p.PlotTo(20,16)
+        p.PlotTo(25, 18)
+        p.PlotTo(60, 17)
+        p.PlotTo(93, 19)
+        p.PlotTo(130, 18)
+
+        # Second Yard
+        p.CurrentLocation = eastYard
+        p.SetTo(65, 17)
+        p.PlotTo(66, 18)
+        p.PlotTo(66, 36)
             
-    # Create the track    
-    p = TrackPlotter(map, 5,10, '-')
-    p.PlotTo(15,10)
-    p.PlotTo(19,13)
-    p.PlotTo(19,16)
-    p.PlotTo(18,17)
-    p.PlotTo(6 ,17)
-    p.PlotTo(4 ,15)
-    p.PlotTo(4 ,11)
-    p.PlotTo(5,10)
-    
-    # Yard tracks
-    p.SetTo(18,17)
-    p.PlotTo(16,19)
-    p.PlotTo(7, 19)    
-    p.SetTo(16,19)
-    p.PlotTo(14,21)
-    p.PlotTo(7, 21)
-    p.PlotTo(5,19)
-    p.PlotTo(2,19)
-    p.PlotTo(7,19)
-    p.SetTo(2,19)
-    p.PlotTo(1,20)
-    p.PlotTo(1,30)
-    
-    # Line off the right side
-    p.SetTo(19,15)
-    p.PlotTo(20,16)
-    p.PlotTo(25, 18)
-    p.PlotTo(60, 17)
-    
-    p.SetTo(40, 17)
-    p.PlotTo(35, 23)
-    p.PlotTo(20,25)
-    
-    # ---- Validate that no tracks have 90 degree turns unless they're cross tracks or switches.
-    # ---- Validate that no tracks have more than 3 connections, and that two of those are adjacent.
-    
-    return map
+        p.SetTo(66,22)
+        p.PlotTo(67,23) # First Line
+        p.PlotTo(78,23)
+        
+        p.SetTo(66,24)
+        p.PlotTo(67,25) # Second Line
+        p.PlotTo(78,25)
+        
+        p.SetTo(66,26)
+        p.PlotTo(67,27) # Third Line
+        p.PlotTo(77,27)
+            
+        p.SetTo(66, 28)
+        p.PlotTo(67,29) # Fourth Line
+        p.PlotTo(76,29)
+        
+        p.SetTo(66, 20)
+        p.PlotTo(67, 19) # Triangluar connection to allow trains to flip around.
+        p.PlotTo(70,19)
+        p.PlotTo(71,18)
+        
+        # ---- Validate that no tracks have 90 degree turns unless they're cross tracks or switches.
+        # ---- Validate that no tracks have more than 3 connections, and that two of those are adjacent.

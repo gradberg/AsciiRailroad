@@ -18,17 +18,18 @@
   * *DONE* Set-up Github or Mercurial for code. Put this document file up on there.
 
 * 0.1.x - Gameplay: Now that some very basic structure is set up (tracks, switches, movement on and off of train, splitting and joining trains) its time to add SOME actually gameplay so that there is a reason to for some of the other infrastructure to exist (better GUI, game lifecycle)
-  * 0.1.1 - Add some basic objectives (a yard, move a car from one yard to the other) - This sets the stage for adding the Steam Locomotive mechanics as the challenge for accomplishing those basic objectives.
-    * Add cash to player and display. Will just be for display now.
-    * Add locations to the map (Rail Yards). They will have a different background color, have a name, which the user can see when they are over them.
-    * Add missions, where the player must move a car from one yard to another. The user will have a mission browser (in the locomotive? caboose!).
-    * Add checking and success/failure of the mission, with corresponding cash change.
-  * 0.1.2 - Steam Locomotive mechanics and unit tests - Add this now, as it provides the more interesting movement aspect to playing the game (albeit I want some workaround so that for dev mode, I can easily move the train around)
-    * Create a Push Cart, which the user presses a button to give it force (which it can save with momentum). Probably cannot pull a car
-    * Create a Super Push Cart, which gives the user significant force to pull things. This would essentially be the dev-god-mode locomotive.
-    * Create a basic steam locomotive itself
-  * 0.1.3 - Time System - Not quite yet, there just are not enough game components to use it
-  * 0.1.4 - Objectives/Score - 
+    * 0.1.1 - Add some basic objectives (a yard, move a car from one yard to the other) - This sets the stage for adding the Steam Locomotive mechanics as the challenge for accomplishing those basic objectives.
+        * Add cash to player and display. Will just be for display now.
+        * Add locations to the map (Rail Yards). They will have a different background color, have a name, which the user can see when they are over them.\    * Add missions, where the player must move a car from one yard to another. The user will have a mission browser (in the locomotive? caboose!).
+        * Add checking and success/failure of the mission, with corresponding cash change.
+    * 0.1.2 - Steam Locomotive mechanics and unit tests - Add this now, as it provides the more interesting movement aspect to playing the game (albeit I want some workaround so that for dev mode, I can easily move the train around)
+        * Create a Push Cart, which the user presses a button to give it force (which it can save with momentum). Probably cannot pull a car
+        * Create a Super Push Cart, which gives the user significant force to pull things. This would essentially be the dev-god-mode locomotive.
+        * Create a basic steam locomotive itself  
+    * 0.1.3 - NPC Crew - Should b efun to have them managing the engine 
+    * 0.1.4 - NPC Trains - Other trains rolling around with their own goals
+    * 0.1.? - Time System - Not quite yet, there just are not enough game components to use it
+    * 0.1.? - Objectives/Score - 
 		
 * 0.2.x - Game Lifecycle - Now that a number of actual gameplay features exist, add the infrastructure for proper game function, like title screen, save games, etc
   * Title screen
